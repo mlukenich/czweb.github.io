@@ -56,3 +56,43 @@ const jobsData = [
     "qualifications": "5+ years of experience with Linux/Windows server administration. Strong background in networking and security principles. Experience with virtualization technologies."
   }
 ];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('job-listings-container');
+
+  if (container && jobsData.length > 0) {
+    jobsData.forEach(job => {
+      const jobElement = document.createElement('div');
+      jobElement.className = 'job-listing bg-white p-6 rounded-lg shadow-md border border-gray-200';
+      jobElement.innerHTML = `
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h4 class="text-sky-600 text-xl font-bold">${job.title}</h4>
+                <p class="text-lg text-gray-600">${job.location} &bull; ${job.type} &bull; ${job.clearance}</p>
+            </div>
+            <button class="job-toggle mt-4 md:mt-0 btn-secondary">View Details</button>
+        </div>
+        <div class="job-details hidden mt-4 pt-4 border-t border-gray-200">
+            <p class="text-lg"><strong>Responsibilities:</strong><br>${job.responsibilities}</p>
+            <p class="mt-2 text-lg"><strong>Qualifications:</strong><br>${job.qualifications}</p>
+            <a href="/index.html#contact" class="mt-4 inline-block btn-primary">Apply Now</a>
+        </div>
+      `;
+      container.appendChild(jobElement);
+    });
+
+    // Initialize event listeners for the newly added toggle buttons
+    const jobToggles = container.querySelectorAll('.job-toggle');
+    jobToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const jobListing = toggle.closest('.job-listing');
+        const jobDetails = jobListing.querySelector('.job-details');
+        const isHidden = jobDetails.classList.toggle('hidden');
+        toggle.textContent = isHidden ? 'View Details' : 'Hide Details';
+      });
+    });
+
+  } else if (container) {
+    container.innerHTML = '<p class="text-center text-lg text-gray-600">There are currently no open positions. Please check back soon!</p>';
+  }
+});
